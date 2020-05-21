@@ -1,0 +1,36 @@
+VERSION "created by canmatrix"
+
+
+NS_ :
+
+BS_:
+
+BU_: 
+
+
+BO_ 257 CentralLockingSystem: 8 Vector__XXX
+ SG_ LockState : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ AntiTheftSystem : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 258 LockingRemoteControlRequest: 8 Vector__XXX
+ SG_ LockRequest : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+
+
+
+CM_ SG_ 257 LockState "Status of whether the doors are locked or not";
+CM_ SG_ 257 AntiTheftSystem "Status of the detection of theft";
+CM_ SG_ 258 LockRequest "Request for lock/unlock/comfort lock";
+
+
+BA_DEF_ BO_ "GenMsgCycleTimeActive" INT 0 65535;
+BA_DEF_ BO_ "GenMsgDelayTime" INT 0 65535;
+BA_DEF_ BO_ "GenMsgNrOfRepetitions" INT 0 65535;
+BA_DEF_ BO_ "GenMsgSendType" ENUM;
+BA_DEF_ SG_ "GenSigSNA" STRING;
+
+
+
+
+VAL_ 257 LockState 0 "Unlocked" 1 "Locked";
+VAL_ 257 AntiTheftSystem 0 "NoTheftDetected" 1 "TheftDetected";
+VAL_ 258 LockRequest 0 "Idle" 1 "RequestLock" 2 "RequestUnlock";
