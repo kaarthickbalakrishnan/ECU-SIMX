@@ -1,0 +1,64 @@
+VERSION "created by canmatrix"
+
+
+NS_ :
+
+BS_:
+
+BU_: 
+
+
+BO_ 257 CentralLockingSystem: 8 Vector__XXX
+ SG_ LockState : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ AntiTheftSystem : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 258 LockingRemoteControlSystem: 8 Vector__XXX
+ SG_ LockRequest : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+
+BO_ 260 VehicleMotion: 8 Vector__XXX
+ SG_ CrashDetected : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ EngineRunning : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ Velocity : 8|16@1+ (0.1,0) [0|65535] "km/h" Vector__XXX
+
+BO_ 261 WindowControl: 8 Vector__XXX
+ SG_ KeyUP : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ KeyUp : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ KeyDown : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 262 WindowState: 8 Vector__XXX
+ SG_ WindowPosition : 32|8@1+ (0.1,0) [0|255] "m/s2" Vector__XXX
+ SG_ WindowMotion : 5|2@1+ (1,0) [0|3] "" Vector__XXX
+
+
+
+CM_ SG_ 257 LockState "Status of wether the door is locked or not";
+CM_ SG_ 257 AntiTheftSystem "Status of anti theft system";
+CM_ SG_ 258 LockRequest "Request for Lock/unlock or comfort lock";
+CM_ SG_ 260 CrashDetected "Status of wether crash is detected or not";
+CM_ SG_ 260 EngineRunning "Echos Engine Running Status";
+CM_ SG_ 260 Velocity "Value of the Vehicles Velocity";
+CM_ SG_ 261 KeyUP "Status of whether the keyup is enabled or not";
+CM_ SG_ 261 KeyUp "Status of whether the keyup is enabled or not";
+CM_ SG_ 261 KeyDown "Status of whether the keydown  is enabled or not";
+CM_ SG_ 262 WindowPosition "Status about the position of window";
+CM_ SG_ 262 WindowMotion "Status about the motion of the window";
+
+
+BA_DEF_ BO_ "GenMsgCycleTimeActive" INT 0 65535;
+BA_DEF_ BO_ "GenMsgDelayTime" INT 0 65535;
+BA_DEF_ BO_ "GenMsgNrOfRepetitions" INT 0 65535;
+BA_DEF_ BO_ "GenMsgSendType" ENUM;
+BA_DEF_ SG_ "GenSigSNA" STRING;
+
+
+
+
+VAL_ 257 LockState 0 "Unlocked" 1 "Locked";
+VAL_ 257 AntiTheftSystem 0 "SystemisActive" 1 "SystemisInactive";
+VAL_ 258 LockRequest 0 "Idle" 1 "RequestLock" 2 "RequestUnlock" 3 "ComfortLock";
+VAL_ 260 CrashDetected 0 "Crash" 1 "CrashFree";
+VAL_ 260 EngineRunning 0 "NotRunning" 1 "Running";
+VAL_ 261 KeyUP 0 "KeyUpOff";
+VAL_ 261 KeyUp 1 "KeyUpOn";
+VAL_ 261 KeyDown 0 "KeyDownOff" 1 "KeyDownOff";
+VAL_ 262 WindowMotion 0 "NotMoving" 1 "CurrentlyClosing" 2 "CurrentlyOpening";
