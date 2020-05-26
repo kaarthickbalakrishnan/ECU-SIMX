@@ -41,12 +41,13 @@ Window {
                 title: "CAN ID"
                 width: 80
                 delegate: Item {
-                            TextInput {
-                                id: canIdIn
+                            TextField {
+                                id: canidIn
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: parent.verticalCenter
-                                renderType: Text.NativeRendering
-                                text: styleData.value
+                                anchors.verticalCenter: parent.verticalCente
+                                width: 70
+                                height: 20
+                                placeholderText: qsTr("CAN ID")
                             }
                         }
             }
@@ -55,11 +56,13 @@ Window {
                 title: "CAN Message"
                 width: 200
                 delegate: Item {
-                            TextInput {
+                            TextField {
                                 id: messageIn
-                                anchors.verticalCenter: parent.verticalCenter
-                                renderType: Text.NativeRendering
-                                text: styleData.value
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCente
+                                width: 190
+                                height: 20
+                                placeholderText: qsTr("CAN Message")
                             }
                         }
             }
@@ -84,12 +87,13 @@ Window {
                 title: "Period"
                 width: 100
                 delegate: Item {
-                            TextInput {
-                                id:periodIn
+                            TextField {
+                                id: periodIn
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: parent.verticalCenter
-                                renderType: Text.NativeRendering
-                                text: styleData.value
+                                anchors.verticalCenter: parent.verticalCente
+                                width: 90
+                                height: 20
+                                placeholderText: qsTr("period")
                             }
                         }
             }
@@ -119,7 +123,7 @@ Window {
         width: 64
         height: 26
         text: qsTr("Add")
-        onClicked: libraryModel.append({"canID" : " ", "message" : " ", "period" : " " , "send" : "Btn"})
+        onClicked: libraryModel.append({"canID" : "", "message" : " ", "period" : " " , "send" : " "})
     }
 }
 
