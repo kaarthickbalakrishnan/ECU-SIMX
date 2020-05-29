@@ -1,124 +1,115 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Extras 1.4
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.14
+import QtGraphicalEffects 1.0
+import QtQuick.Extras 1.2
 
 Window {
-    id: canSend
+    id: sendbutton
     visible: true
-    width: 450
-    height: 150
-    color: "#efefef"
-    title: qsTr("Can Sender")
+    width: 370
+    height: 320
+    color: "#c5cad1"
+    title: qsTr("BUS CONFIGURATION")
 
-    // Signal argument names are not propagated from Python to QML, so we need to re-emit the signal
-//    signal reNextNumber(int number)
-//    Component.onCompleted: canSender.nextNumber.connect(reNextNumber)
-
-            Button {
-                id: sendBtn
-                x: 364
-                y: 63
-                width: 68
-                height: 23
-                text: qsTr("Send")
-                onClicked: canSender.getCAN_message();
-            }
-
-            Text {
-                id: text1
-                x: 39
-                y: 40
-                text: qsTr("Can ID")
-                font.pixelSize: 12
-            }
-
-            Text {
-                id: text2
-                x: 126
-                y: 40
-                text: qsTr("Can Data")
-                font.pixelSize: 12
-            }
-
-            TextField {
-                objectName: "canID_in"
-                id: id_Input
-                x: 15
-                y: 61
-                width: 83
-                height: 27
-            }
-
-            TextField {
-                objectName: "canData_in"
-                id: data_Input
-                x: 99
-                y: 61
-                width: 104
-                height: 27
-            }
-
-            Text {
-                id: text3
-                x: 235
-                y: 40
-                text: qsTr("Periodic")
-                font.pixelSize: 12
-            }
-
-            TextField {
-                objectName: "period_in"
-                id: period_Input
-                x: 300
-                y: 61
-                width: 58
-                height: 27
-            }
-
-            Switch {
-                objectName: "periodicEnable"
-                id: switch1
-                x: 228
-                y: 70
-                width: 50
-                height: 10
-                text: qsTr("Periodic")
-                checked: false
-            }
-
-            Text {
-                id: text4
-                x: 311
-                y: 40
-                text: qsTr("Period")
-                font.pixelSize: 12
-            }
+   
+    Button {
+        id: send_button
+        x: 139
+        y: 260
+        text: qsTr("CONFIGURE")
+        onClicked: busconfigure.getBUS_configuration();
+    }
 
 
-//            Text {
-//                id: textCheck
-//                x: 229
-//                y: 136
-//                width: 114
-//                height: 28
-//                text: qsTr("Text")
-//                font.pixelSize: 12
-//            }
+    Text {
+        id: channel
+        x: 21
+        y: 116
+        width: 112
+        height: 36
+        text: qsTr("CHANNEL")
+        font.weight: Font.DemiBold
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 18
+    }
 
-//            Button {
-//                id: btn1
-//                x: 404
-//                y: 130
-//                width: 77
-//                height: 22
-//                text: qsTr("Get Num")
-//                onClicked: canSender.giveNumber();
-//            }
+    Text {
+        id: bit_rate
+        x: 21
+        y: 186
+        width: 112
+        height: 36
+        text: qsTr("BIT RATE")
+        font.weight: Font.DemiBold
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 18
+    }
 
-//    Connections {
-//        target: canSend
-//        onReNextNumber: textCheck.text = number
-//    }
+
+    Text {
+        id: bus_type
+        x: 21
+        y: 47
+        width: 112
+        height: 36
+        color: "#050303"
+        text: "BUS TYPE"
+        font.weight: Font.DemiBold
+        styleColor: "#000000"
+        verticalAlignment: Text.AlignVCenter
+        renderType: Text.NativeRendering
+        textFormat: Text.RichText
+        fontSizeMode: Text.FixedSize
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 18
+    }
+
+
+    TextField {
+        objectName: "bitrate_in"
+        id: bitrate_Input
+        x: 172
+        y: 186
+        width: 125
+        height: 36
+        placeholderText: qsTr("bitrate")
+    }
+
+    ComboBox {
+        objectName: "bustype_in"
+        id: bustype1
+        x: 172
+        y: 47
+        width: 125
+        height: 36
+        model: ["socketcan","virtual"]
+        onCurrentIndexChanged:
+        {
+        	if(currentIndex === 0)
+        		channel1.model=["vcan0","vcan1"]
+        	else if (currentIndex === 1)
+        		channel1.model =["can0","can1"]
+        }
+    }
+
+
+    ComboBox {
+        objectName: "channel_in"
+        id: channel1
+        x: 172
+        y: 116
+        width: 125
+        height: 36
+    }
+
+        Button {
+            id: button
+         	x: 247
+       	    y: 260
+            text: qsTr("SEND TEST")
+            onClicked: busconfigure.send_can();
+        }
 }
-
