@@ -5,18 +5,16 @@ Reference: https://qmlbook.github.io/ch18-python/python.html
 @author: manz
 '''
 import sys
+from PyQt5.QtCore import QUrl, QObject, pyqtSlot, pyqtSignal
+from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtQml import QQmlApplicationEngine
+  
 import can
-from PySide2.QtCore import QUrl
-from PySide2.QtGui import QGuiApplication
-from PySide2.QtQml import QQmlApplicationEngine
-
-from PySide2.QtCore import QObject, Signal, Slot
-
 bus = can.interface.Bus(bustype='socketcan', channel='vcan0', bitrate=250000)
 
 class CAN_Sender(QObject):
-    dataChanged = Signal(int)
-    nextNumber = Signal(int)
+    dataChanged = pyqtSignal(int)
+    nextNumber = pyqtSignal(int)
     
     def __init__(self):
         QObject.__init__(self)
@@ -25,36 +23,28 @@ class CAN_Sender(QObject):
 #     def giveNumber(self):
 #         self.nextNumber.emit(10)
     
-    @Slot()
+    @pyqtSlot()
     def getCAN_message(self):
-        periodicEn_Obj = senderW.findChild(QObject, "periodicEnable")
-        period_Obj = senderW.findChild(QObject, "period_in")
-        periodic_En = periodicEn_Obj.property("checked")
-        period = int(period_Obj.property("text"),16)
+        data_Obj = senderW.findChild(QObject, "canData_in")
+        id_Obj = senderW.findChild(QObject, "canID_in")
+        C_data = data_Obj.property("text")
+        dataList = list(C_data.split(" "))   # Convert text List (space difference)
+        h_dataList = [int(i,16) for i in dataList]  # convert list items to Hex Values
+        C_ID = int(id_Obj.property("text"),16)
         
-        print(period)
+        periodicEn_Obj = senderW.findChild(QObject, "periodicEnable")
+        periodic_En = periodicEn_Obj.property("checked")
+        
         if periodic_En:
-            data_Obj = senderW.findChild(QObject, "canData_in")
-            id_Obj = senderW.findChild(QObject, "canID_in")
-            C_data = data_Obj.property("text")
-            dataList = list(C_data.split(" "))   # Convert text List (space difference)
-            h_dataList = [int(i,16) for i in dataList]  # convert list items to Hex Values
-            C_ID = int(id_Obj.property("text"),16)
-            
+            period_Obj = senderW.findChild(QObject, "period_in")
+            period = int(period_Obj.property("text"),16)
             msg = can.Message(arbitration_id=C_ID,data=h_dataList,is_extended_id=False)
             try:
                 bus.send_periodic(msg,(period*0.001))
                 print("Sent Periodic ID: " + str(hex(C_ID)) + "\tData: " + str(h_dataList))
             except can.CanError:
                 print("Message NOT sent")
-        else:        
-            data_Obj = senderW.findChild(QObject, "canData_in")
-            id_Obj = senderW.findChild(QObject, "canID_in")
-            C_data = data_Obj.property("text")
-            dataList = list(C_data.split(" "))   # Convert text List (space difference)
-            h_dataList = [int(i,16) for i in dataList]  # convert list items to Hex Values
-            C_ID = int(id_Obj.property("text"),16)
-            
+        else:                     
             msg = can.Message(arbitration_id=C_ID,data=h_dataList,is_extended_id=False)
             try:
                 bus.send(msg)
