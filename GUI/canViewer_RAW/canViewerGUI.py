@@ -128,11 +128,12 @@ class GUIWindow(QMainWindow):
         self.logView.move(10,10)
         self.logView.resize(800,500)
         
-        b = QPushButton("Start Viewer")
-        b.pressed.connect(self.startView)
+        self.btn = QPushButton("Play / Pause")
+        self.btn.setCheckable(True)
+        self.btn.pressed.connect(self.startView)
     
         layout.addWidget(self.logView)
-        layout.addWidget(b)
+        layout.addWidget(self.btn)
         
         self.new_record.connect(self.logView.appendPlainText)
     
@@ -148,11 +149,14 @@ class GUIWindow(QMainWindow):
         self.new_record.emit(str(msg)) # <---- emit signal here
  
     def startView(self):
-        # Pass the function to execute
-        self.emit("Start Button Pressed")
+       if self.btn.isChecked():
+          self.emit("Play Button Pressed")
+       else:
+          self.emit("Pause Button Pressed")
 
 app = QApplication([])
 window = GUIWindow()
+window.setWindowTitle("CAN Viewer")
 window.resize(900, 500)
 
 class gui_App (Thread):  
