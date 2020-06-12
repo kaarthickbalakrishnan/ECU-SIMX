@@ -31,6 +31,8 @@ class testWindow(QObject): #creating testWindow child class for QObject
         l=list(dat)#converting dat to list l
         for i in range(0,len(l)-1,2):
             s.append(l[i]+l[i+1])#appending the nearest two values of list l and append to another list s
+        if (len(l)-1)%2==0:#for sending single bit or data with odd length
+            s.append(l[len(l)-1])
         for i in range(len(s)):
             e=int(s[i],16)#converting to hexa-decimal value
             s[i]=e#saving it as hexa-decimal value
