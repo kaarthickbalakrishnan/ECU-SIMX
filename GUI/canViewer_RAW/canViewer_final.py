@@ -110,7 +110,7 @@ class CanViewer:
         self.newEntry += "{0:.6f}".format(self.ids[key]["dt"]) + '\t'
         self.newEntry += arbitration_id_string + '\t'
         self.newEntry += str(msg.dlc) + '\t'
-        for i  in range (len(can_data_string)):
+        for i  in range (len(can_data_string)): #each byte is processed for removal of square brackets and comma as it is in list datatype
             self.newEntry += str(can_data_string[i])
             self.newEntry +=str("     ")
         #append Data on GUI
@@ -133,16 +133,16 @@ class GUIWindow(QMainWindow):
         self.logView.move(10,10)
         self.logView.resize(800,500)
         
-        self.btn = QPushButton("Play")
-        self.btn1 = QPushButton("Pause")
-        self.btn.setCheckable(False)
-        self.btn1.setCheckable(False)
-        self.btn.pressed.connect(self.startView)
-        self.btn1.pressed.connect(self.pauseView)
+#         self.btn = QPushButton("Play")
+#         self.btn1 = QPushButton("Pause")
+#         self.btn.setCheckable(False)
+#         self.btn1.setCheckable(False)
+#         self.btn.pressed.connect(self.startView)
+#         self.btn1.pressed.connect(self.pauseView)
     
         layout.addWidget(self.logView)
-        layout.addWidget(self.btn)
-        layout.addWidget(self.btn1)
+#         layout.addWidget(self.btn)
+#         layout.addWidget(self.btn1)
         
         self.new_record.connect(self.logView.appendPlainText)
     
@@ -157,14 +157,14 @@ class GUIWindow(QMainWindow):
         msg = record
         self.new_record.emit(str(msg)) # <---- emit signal here
  
-    def startView(self):
-       if self.btn.isChecked():
-          self.emit("Start Button Pressed")
-      
-    def pauseView(self):
-        if self.btn1.isChecked():
-           self.emit("pause Button Pressed")
-            
+#     def startView(self):
+#        if self.btn.isChecked():
+#           self.emit("Start Button Pressed")
+#       
+#     def pauseView(self):
+#         if self.btn1.isChecked():
+#            self.emit("pause Button Pressed")
+#             
 
 app = QApplication([])
 window = GUIWindow()
