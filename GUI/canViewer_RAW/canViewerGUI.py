@@ -1,12 +1,8 @@
 '''
-Created on 08-Jun-2020
+Created on 11-Jun-2020
 
-https://www.learnpyqt.com/courses/concurrent-execution/multithreading-pyqt-applications-qthreadpool/
-
-
-@author: manz
+@author: karthikeyan
 '''
-
 from PyQt5.Qt import QApplication
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPlainTextEdit, QVBoxLayout, QPushButton
@@ -16,6 +12,7 @@ import time
 import struct
 from typing import Dict, Tuple, Union
 from threading import Thread
+from ast import literal_eval 
 
 class bus_Cofing ():
     def __init__(self):
@@ -94,11 +91,17 @@ class CanViewer:
             self.ids[key]["count"] += 1
 
         # Format the CAN ID&Data as a hex value
-        arbitration_id_string = "0x{0:0{1}X}".format(
+        arbitration_id_string = "{0:0{1}X}".format(
             msg.arbitration_id, 8 if msg.is_extended_id else 3)
         
-        can_data_string = (["{:#02x}".format(byte) for byte in msg.data])
+        can_data_string = (["{0:02X}".format(byte) for byte in msg.data])
 
+#         #to convert hex data to decimal data
+#         can_data_decimal=[]  #empty list to save decimal converted value
+#         for i in range (len(can_data_string)): #fetching each hex value
+#             j=int(str(can_data_string[i]),16)  #converting to decimal value
+#             can_data_decimal.append((j)) #appending converted decimal value to new list
+#         
         # Now create the CAN-Bus message to GUI Window
         self.newEntry = ""
         
@@ -107,7 +110,9 @@ class CanViewer:
         self.newEntry += "{0:.6f}".format(self.ids[key]["dt"]) + '\t'
         self.newEntry += arbitration_id_string + '\t'
         self.newEntry += str(msg.dlc) + '\t'
-        self.newEntry += str(can_data_string)
+        for i  in range (len(can_data_string)):
+            self.newEntry += str(can_data_string[i])
+            self.newEntry +=str("     ")
         #append Data on GUI
         self.logToViewer(self.newEntry)
         
@@ -128,12 +133,16 @@ class GUIWindow(QMainWindow):
         self.logView.move(10,10)
         self.logView.resize(800,500)
         
-        self.btn = QPushButton("Play / Pause")
-        self.btn.setCheckable(True)
+        self.btn = QPushButton("Play")
+        self.btn1 = QPushButton("Pause")
+        self.btn.setCheckable(False)
+        self.btn1.setCheckable(False)
         self.btn.pressed.connect(self.startView)
+        self.btn1.pressed.connect(self.pauseView)
     
         layout.addWidget(self.logView)
         layout.addWidget(self.btn)
+        layout.addWidget(self.btn1)
         
         self.new_record.connect(self.logView.appendPlainText)
     
@@ -150,15 +159,21 @@ class GUIWindow(QMainWindow):
  
     def startView(self):
        if self.btn.isChecked():
-          self.emit("Play Button Pressed")
-       else:
-          self.emit("Pause Button Pressed")
+          self.emit("Start Button Pressed")
+      
+    def pauseView(self):
+        if self.btn1.isChecked():
+           self.emit("pause Button Pressed")
+            
 
 app = QApplication([])
 window = GUIWindow()
 window.setWindowTitle("CAN Viewer")
 window.resize(900, 500)
 
+
+    
+    
 class gui_App (Thread):  
     def __init__(self):
         Thread.__init__(self)
@@ -196,5 +211,7 @@ if __name__ == '__main__':
     
     canViewThread.start()
     guiAppThread.start()
+    
+    
     #Launch GUI
     sys.exit(guiAppThread.launch())
