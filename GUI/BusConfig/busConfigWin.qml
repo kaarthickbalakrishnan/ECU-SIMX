@@ -73,7 +73,7 @@ Window {              //Creating a plain window
    // Adding a text field to get user response as a text
 
     TextField {
-        objectName: "bitrate_in" //Object name to identify and fetch the details given by the user 
+        objectName: "bitrate_in" //Object name to identify the widget and fetch the details given by the user 
         id: bitrate_Input
         x: 172
         y: 186
