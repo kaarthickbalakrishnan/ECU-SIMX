@@ -69,14 +69,14 @@ class tWindow(testWindow):
             
             
         for i in range(len(s)):
-            e=int(s[i],base=16)#converting to hexa-decimal value
+            e=int(s[i],16)#converting to hexa-decimal value
             s[i]=e#saving it as hexa-decimal value
         period=(period=="true")#comparing whether the data is periodic or not
         t=int(id,base=16)#converting id to hexa-decimal value
         msg = can.Message(arbitration_id=t,data=s,is_extended_id=False)#creating message frame with data
         if(period):#check whether periodic or not
             #for periodic message
-            time=int(time)#converting time to integer
+            time=int(time,10)#converting time to integer
             try:
                 bus.send_periodic(msg,(time*0.001))
                 print("Sent Periodic ID: {}   Data:: {} ".format(id,dat))
