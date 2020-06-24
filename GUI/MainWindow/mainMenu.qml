@@ -35,7 +35,7 @@ ApplicationWindow {
                 onTriggered: myWindow.open();
             }
             MenuItem {
-                text: "Close"
+                text: "Quit"
                 onTriggered: mainWindow.close();
             }
 
@@ -69,11 +69,17 @@ ApplicationWindow {
                 width: 300
                 height: 300
                 visible: false
-                Text {
-                    id: text_about
-                    color: "#fff7f7"
-                    text: qsTr("abc")
-                    font.pixelSize: 15
+                Text{
+                   objectName: "aboutText"
+                   width: parent.width
+                   id: about_Text
+                   x: 0
+                   y: 0
+                   height: parent.height
+                   wrapMode: "WordWrap"
+                    text: " ANCIT is a growing Automotive Tooling and Engineering Services Company based out of US, Germany and Bangalore - INDIA catering prominent enterprises to startup ventures committed in Industrial,Semiconductor, Automotive, IoT , Defence and Aerospace.
+
+Our mission is to help leading corporations and individuals, create and enhance efficient IT landscapes using various technologies that improve process and productive. More than mere tools, our process clearly aims at supporting people in maximizing their benefits and reduce the risk of failures."
                 }
                 function open(){
                     visible = true
