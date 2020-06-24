@@ -1,7 +1,7 @@
 '''
 Created on 10-Jun-2020
 
-@author: vanaja,hemalatha,murugeshwari
+@author: vanaja
 '''
 
 import can
@@ -9,7 +9,7 @@ import sys
 import time
 import struct
 from time import sleep
-from threading import Thread
+import threading
 from typing import Dict, Tuple, Union
 
 from PyQt5.QtQml import QQmlApplicationEngine
@@ -36,6 +36,20 @@ class testWindow(QObject): #creating testWindow child class for QObject
     @pyqtSlot()
     def send(self):
         tWind=tWindow()
+    
+    @pyqtSlot()
+    def playCanView(self):
+        if canViewThread.is_alive():
+            canViewThread.resume() 
+            print("CanViewer Resumed")   
+        else:
+            canViewThread.start()
+            print("CanViewer Started")
+            
+    @pyqtSlot()
+    def pauseCanView(self):    
+        canViewThread.pause()
+        print("CanViewer Paused")
           
     @pyqtProperty(str, notify=sig_canViewChanged)
     def updateView(self): 
@@ -123,7 +137,7 @@ class viewer_Cofing ():
         self.data_structs = Dict[Union[int, Tuple[int, ...]], Union[struct.Struct, Tuple, None]]
 
 class CanViewer():
-    def __init__(self, bus, data_structs, testing=False):
+    def __init__(self, bus, data_structs):
         self.bus = bus
         self.data_structs = data_structs
 
@@ -134,22 +148,17 @@ class CanViewer():
         self.paused = False
         self.newEntry = ""
 
-        if not testing:  # pragma: no cover
-            self.run()
-
     def run(self):
         # Clear the terminal and draw the header
 #         self.draw_header()
-        while 1:
-            # Do not read the CAN-Bus when in paused mode
-            if not self.paused:
-                # Read the CAN-Bus and draw it in the terminal window
-                msg = self.bus.recv(timeout=1.0 / 1000.0)
-                if msg is not None:
-                    self.draw_can_bus_message(msg)
-            else:
-                # Sleep 1 ms, so the application does not use 100 % of the CPU resources
-                time.sleep(1.0 / 1000.0)
+        if not self.paused:
+            # Read the CAN-Bus and draw it in the terminal window
+            msg = self.bus.recv(timeout=1.0 / 1000.0)
+            if msg is not None:
+                self.draw_can_bus_message(msg)
+        else:
+            # Sleep 1 ms, so the application does not use 100 % of the CPU resources
+            time.sleep(1.0 / 1000.0)
 
     def draw_can_bus_message(self, msg, sorting=False):
         # Use the CAN-Bus ID as the key in the dict
@@ -190,11 +199,17 @@ class CanViewer():
             self.ids[key]["count"] += 1
 
         # Format the CAN ID&Data as a hex value
-        arbitration_id_string = "0x{0:0{1}X}".format(
+        arbitration_id_string = "{0:0{1}X}".format(
             msg.arbitration_id, 8 if msg.is_extended_id else 3)
         
-        can_data_string = (["{:#02x}".format(byte) for byte in msg.data])
+        can_data_string = (["{0:02X}".format(byte) for byte in msg.data])
 
+#         #to convert hex data to decimal data
+#         can_data_decimal=[]  #empty list to save decimal converted value
+#         for i in range (len(can_data_string)): #fetching each hex value
+#             j=int(str(can_data_string[i]),16)  #converting to decimal value
+#             can_data_decimal.append((j)) #appending converted decimal value to new list
+#         
         # Now create the CAN-Bus message to GUI Window
         self.newEntry = ""
         
@@ -203,43 +218,82 @@ class CanViewer():
         self.newEntry += "{0:.6f}".format(self.ids[key]["dt"]) + '\t'
         self.newEntry += arbitration_id_string + '\t'
         self.newEntry += str(msg.dlc) + '\t'
-        self.newEntry += str(can_data_string)
+        for i  in range (len(can_data_string)):
+            self.newEntry += str(can_data_string[i])
+            self.newEntry +=str("     ")
         #append Data on GUI
         self.logToViewer(self.newEntry)
       
     def logToViewer(self,text):
-        print(text)
+        # uncomment the below line print the canView in Console window also
+#         print(text)
         currentWindow.updateView = text
 
-class canView(Thread):
-    def __init__(self):
-        Thread.__init__(self)
+class canView(threading.Thread):
+    def __init__(self, *args, **kwargs):
+        super (canView, self). __init__ (*args, **kwargs)
+        self.__flag = threading.Event()  # is used to suspend the thread's identity
+        self.__flag.set ()    # set to True
+        self.__running = threading.Event()   # to stop the thread's identity
+        self.__running.set ()   # Set Running to True
         
-    def run(self):      
+    def pause (self):
+      self.__flag.clear ()   # set to False to allow threads to block
+    
+    def resume (self):
+      self.__flag.set ()  # set to True to allow thread to stop blocking
+    
+    def stop (self):
+      self.__flag.set ()    # Restores a thread from a paused state. How to have paused
+      self.__running.clear ()    # set to False      Thread.__init__(self)
+        
+    def run(self):     
         localConfig = viewer_Cofing()
         config = {"single_handle": True}
         # config["can_filters"] = localConfig.filter
+    
+        data_structs = localConfig.data_structs
+        currentView = CanViewer(bus, data_structs)
+        # Do not read the CAN-Bus when in paused/stopped mode     
+        while self.__running.isSet():
+            self.__flag.wait ()   # returns immediately when false, blocking until the internal identity bit is true to return            
+            currentView.run()
+            
 
-        data_structs = localConfig.data_structs      
-        CanViewer(bus, data_structs)
-
-class gui_App (Thread):  
-    def __init__(self):
-        Thread.__init__(self)
+class gui_App (threading.Thread):  
+    def __init__(self, *args, **kwargs):
+        super (gui_App, self). __init__ (*args, **kwargs)
+        self.__flag = threading.Event ()   # is used to suspend the thread's identity
+        self.__flag.set ()    # set to True
+        self.__running = threading.Event ()   # to stop the thread's identity
+        self.__running.set ()   # Set Running to True
+        
+    def pause (self):
+      self.__flag.clear ()   # set to False to allow threads to block
+    
+    def resume (self):
+      Self.__flag.set ()  # set to True to allow thread to stop blocking
+    
+    def stop (self):
+      self.__flag.set ()    # Restores a thread from a paused state. How to have paused
+      self.__running.clear ()    # set to False  
         
     def launch(self):
         global w_SimX
         global currentWindow
         
-        app =QApplication(sys.argv)#creating an application object
-        engine = QQmlApplicationEngine()#creating an engine object
-        currentWindow = testWindow()#creating object of testWindow class and initialize constructor 
-        engine.rootContext().setContextProperty("testWindow", currentWindow)#connection between qml and python
-        engine.load('mainMenu.qml')#loading qml
-        w_SimX=engine.rootObjects()[0]  #w_SimX object for qml 
-        if not engine.rootObjects():
-            sys.exit(-1)
-        sys.exit(app.exec_())#to exit window
+        while self.__running.isSet():
+            self.__flag.wait ()   # returns immediately when false, blocking until the internal identity bit is true to return        
+            
+            app =QApplication(sys.argv)#creating an application object
+            engine = QQmlApplicationEngine()#creating an engine object
+            currentWindow = testWindow()#creating object of testWindow class and initialize constructor 
+            engine.rootContext().setContextProperty("testWindow", currentWindow)#connection between qml and python
+            engine.load('mainMenu.qml')#loading qml
+            w_SimX=engine.rootObjects()[0]  #w_SimX object for qml 
+            if not engine.rootObjects():
+                sys.exit(-1)
+            sys.exit(app.exec_())#to exit window
         
 if __name__ == "__main__": 
     #default Bus
@@ -247,8 +301,7 @@ if __name__ == "__main__":
     #Threads
     canViewThread = canView()
     guiAppThread = gui_App()
-    guiAppThread.start()
-    canViewThread.start()
+    
     #Launch GUI
     sys.exit(guiAppThread.launch())
     
