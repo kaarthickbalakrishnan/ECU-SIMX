@@ -9,20 +9,24 @@ import QtGraphicalEffects.private 1.0
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Window 2.0
+
 ApplicationWindow {
     visible:true
     id:window
     title: "ANCIT EDB EDITOR"
     width: 415
-    height: 500
-
-//Window {
-    //id: window
-    //visible: true
-    //width: 415
-    //height: 490
-   // color: "#ebebeb"
-    //title: qsTr("ANCIT EDB Editor")
+    height: 510
+    
+    Image {
+        id: image
+        x: 285
+        y: 3
+        width: 110
+        height: 37
+        fillMode: Image.PreserveAspectCrop
+        source: "ANCIT Logo.gif"
+    }
+    
     menuBar: MenuBar {
 
         Menu {
@@ -32,67 +36,54 @@ ApplicationWindow {
                 onTriggered: myWindow.open();//will open a child window
             }
             MenuItem {
-                text: "Quit"
+                text: "Close"
                 onTriggered: window.close();//will close the full application
             }
 
 
-    Window{   //window used in open menuitem
-        id: myWindow
-        title: "Window"
-        width: 300
-        height: 300
-        visible: false
-        function open(){
-            visible = true
-        }
-        function close(){
-            visible = false
-        }
-    }
-}
+		    Window{   //window used in open menuitem
+		        id: myWindow
+		        title: "Window"
+		        width: 300
+		        height: 300
+		        visible: false
+		        function open(){
+		            visible = true
+		        }
+		        function close(){
+		            visible = false
+		        }
+		    }
+		}
 
         Menu {
             title: "Help"
             MenuItem { text: "Help Contents"
-                 onTriggered:Qt.openUrlExternally("helpDoc.pdf")//url of file source to be mentioned
+                 onTriggered:Qt.openUrlExternally("FIELDS IN EXCEL.odt")//url of file source to be mentioned
                    }
             MenuItem {
                 text: "About"
                 onTriggered: win.open();
 
-            }Window{//window used in about content ...contents to be added
+            }
+            Window{//window used in about content ...contents to be added
                 id: win
                 title: "About"
                 width: 300
                 height: 300
                 visible: false
-                
-                Text{
-                   objectName: "aboutText"
-                   width: parent.width
-                   id: about_Text
-                   x: 0
-                   y: 0
-                   height: parent.height
-                   wrapMode: "WordWrap"
-                   text: " ANCIT is a growing Automotive Tooling and Engineering Services Company based out of US, Germany and Bangalore - INDIA catering prominent enterprises to startup ventures committed in Industrial,Semiconductor, Automotive, IoT , Defence and Aerospace.
-
-Our mission is to help leading corporations and individuals, create and enhance efficient IT landscapes using various technologies that improve process and productive. More than mere tools, our process clearly aims at supporting people in maximizing their benefits and reduce the risk of failures."
-                }
                 function open(){
                     visible = true
                 }
 
- }
+ 			}
+		}
     }
-
-        }
 
         GroupBox {
             id: groupBoxIn
             x: 16
-            y: 12
+            y: 22
             width: 379
             height: 129
             title: qsTr("Input")
@@ -145,7 +136,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
         GroupBox {
             id: groupBoxOut
             x: 16
-            y: 152
+            y: 162
             width: 379
             height: 310
             title: qsTr("Output")
@@ -266,4 +257,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 }
 
             }
+
+
 }
+

@@ -57,7 +57,7 @@ ApplicationWindow {
         Menu {
             title: "Help"
             MenuItem { text: "Help Contents"
-                onTriggered:Qt.openUrlExternally("/helpDoc.pdf")//url of filesource to be mentioned
+                onTriggered:Qt.openUrlExternally("helpDoc.pdf")//url of filesource to be mentioned
             }
             MenuItem {
                 text: "About"
@@ -95,7 +95,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
         sourceSize.width: 0
         opacity: 0.9
         anchors.bottomMargin: 290
-        source: "../../../../snap/skype/common/ANCIT Logo.gif"
+        source: "ANCIT Logo.gif"
         anchors.fill: parent
         anchors.rightMargin: 122
         fillMode: Image.PreserveAspectFit
