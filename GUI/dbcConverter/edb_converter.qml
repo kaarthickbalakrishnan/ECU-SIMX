@@ -172,7 +172,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
                     x: 136
                     y: 12
                     width: groupBoxOut.width / 4
-                    model : [ 'arxml', 'csv', 'dbc', 'dbf', 'json', 'kcd', 'xml', 'sym', 'xls', 'yaml', 'py', 'lua']
+                    model : [ 'dbc', 'kcd', 'csv', 'dbf', 'json', 'arxml', 'xml', 'sym', 'xls', 'yaml', 'py', 'lua']
                 }
 
                  TextField {
