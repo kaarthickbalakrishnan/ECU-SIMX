@@ -14,12 +14,12 @@ ApplicationWindow {
     visible:true
     id:window
     title: "ANCIT EDB EDITOR"
-    width: 415
+    width: 375
     height: 510
     
     Image {
         id: image
-        x: 285
+        x: 248
         y: 3
         width: 110
         height: 37
@@ -91,72 +91,83 @@ Our mission is to help leading corporations and individuals, create and enhance 
  			}
 		}
     }
+    GroupBox {
+        id: groupBoxIn
+        x: 13
+        y: 22
+        width: 346
+        height: 151
+        title: qsTr("Input")
 
-        GroupBox {
-            id: groupBoxIn
-            x: 16
-            y: 22
-            width: 379
-            height: 129
-            title: qsTr("Input")
+            Text {
+               id: inputfilename
+               x: 0
+               y: 22
+               width: groupBoxIn.width / 3
+               text: qsTr("Input File")
+               Layout.fillWidth: false
+               font.bold: false
+               font.weight: Font.DemiBold
+               font.pixelSize: 13
+            }
 
-                Text {
-                   id: inputfilename
-                   x: 0
-                   y: 22
-                   width: groupBoxIn.width / 3
-                   text: qsTr("Input File")
-                   Layout.fillWidth: false
-                   font.bold: false
-                   font.weight: Font.DemiBold
-                   font.pixelSize: 13
+            TextField {
+               objectName: "inputPath"
+               id: inputPath_text
+               x: 137
+               y: 13
+               width: 186
+               height: 25
+               text: ""
+            }
+
+            Button {
+                Layout.row: 1
+                objectName: "browser_button"
+                id: browse
+                x: 137
+                y: 46
+                width: 90
+                text: qsTr("Browse File")
+                onClicked: {
+                        edb.browse_in()
                 }
+            }
 
-                TextField {
-                   objectName: "inputPath"
-                   width: groupBoxIn.width / 2
-                   id: inputPath_text
-                   x: 137
-                   y: 13
-                   height: 25
-                   text: ""
+            Button {
+                id: newTemp
+                x: 233
+                y: 47
+                width: 90
+                text: qsTr("New File")
+                objectName: "new_button"
+                onClicked: {
+                    edb.excel();
                 }
+            }
 
-                Button {
-                    Layout.row: 1
-                    objectName: "browser_button"
-                    id: browse
-                    x: 137
-                    y: 52
-                    width: groupBoxIn.width / 4
-                    text: qsTr("Browse File")
-                    onClicked: {
-                            edb.browse_in()
-                    }
-                }
-
-                Button {
-                    id: newTemp
-                    x: 249
-                    y: 52
-                    width: groupBoxIn.width / 4
-                    text: qsTr("New File")
-                    objectName: "new_button"
-                }
-        }
+            Button {
+                x: 137
+                y: 78
+                width: 186
+                height: 25
+                text: qsTr("Edit File")
+                onClicked:edb.edit_();
+            }
+    }
 
         GroupBox {
             id: groupBoxOut
-            x: 16
-            y: 162
-            width: 379
-            height: 310
+            x: 15
+            y: 179
+            width: 344
+            height: 300
             title: qsTr("Output")
 
                 Text {
                     id: fileFormat
-                    x: 3
-                    y: 5
+                    x: 0
+                    y: 13
                     width: groupBoxOut.width / 4
                     text: qsTr("File Format")
                     font.bold: false
@@ -169,26 +180,16 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 ComboBox {
                     objectName: "output_format"
                     id: comboBox
-                    x: 136
-                    y: 12
-                    width: groupBoxOut.width / 4
-                    model : [ 'dbc', 'kcd', 'csv', 'dbf', 'json', 'arxml', 'xml', 'sym', 'xls', 'yaml', 'py', 'lua']
+                    x: 137
+                    y: 10
+                    width: 90
+                    model : [ 'dbc', 'csv', 'kcd', 'dbf', 'arxml', 'json', 'xml', 'sym', 'xls', 'yaml', 'py', 'lua']
                 }
-
-                 TextField {
-                    objectName: "output_in"
-                    id: output_filename
-                    x: 136
-                    y: 47
-                    width: groupBoxOut.width / 2
-                    height: 25
-                    placeholderText: qsTr("Name without extension")
-                 }
                  Button {
                     id: convert
-                    x: 184
-                    y: 142
-                    width: groupBoxOut.width / 4
+                    x: 89
+                    y: 128
+                    width: 150
                     text: qsTr("CONVERT")
                     onClicked:{
                         edb.convert_()
@@ -199,18 +200,18 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 TextField {
                     objectName: "outputPath"
                     id: textArea2
-                    x: 136
-                    y: 82
-                    width: groupBoxOut.width / 3
+                    x: 137
+                    y: 54
+                    width: 186
                     height: 25
                 }
 
                 Button {
                     objectName: "browser_button2"
                     id: browse2
-                    x: 280
-                    y: 82
-                    width: groupBoxOut.width / 6
+                    x: 137
+                    y: 85
+                    width: 90
                     text: qsTr("Browse")
                     onClicked: edb.browse_out();// Once the button pressed the python function will be invoked
                 }
@@ -218,9 +219,9 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 TextArea {
                     objectName: "console"
                     id: textArea3
-                    x: 0
-                    y: 187
-                    width: 336
+                    x: 7
+                    y: 175
+                    width: 312
                     height: 84
                     readOnly: true
                     visible: true
@@ -228,25 +229,11 @@ Our mission is to help leading corporations and individuals, create and enhance 
 
                 Text {
                     id: ouputdirectory
-                    x: 3
-                    y: 76
+                    x: 0
+                    y: 48
                     width: 112
                     height: 36
-                    text: qsTr("Ouput Directory")
-                    font.bold: false
-                    font.pixelSize: 13
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    font.weight: Font.DemiBold
-                }
-
-                Text {
-                    id: filename
-                    x: 3
-                    y: 41
-                    width: 112
-                    height: 36
-                    text: qsTr("File Name")
+                    text: qsTr("Ouput File")
                     font.bold: false
                     font.pixelSize: 13
                     verticalAlignment: Text.AlignVCenter
@@ -256,10 +243,10 @@ Our mission is to help leading corporations and individuals, create and enhance 
 
                 Text {
                     id: fileFormat1
-                    x: 0
-                    y: 154
+                    x: 8
+                    y: 151
                     width: 150
-                    height: 36
+                    height: 25
                     text: qsTr("Status")
                     font.bold: false
                     font.pixelSize: 13
@@ -268,8 +255,6 @@ Our mission is to help leading corporations and individuals, create and enhance 
                     font.weight: Font.DemiBold
                 }
 
-            }
-
+        }
 
 }
-
