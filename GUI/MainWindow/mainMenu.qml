@@ -31,8 +31,8 @@ ApplicationWindow {
         Menu {
             title: "File"
             MenuItem {
-                text: "Open"
-                onTriggered: myWindow.open();
+                text: "New"
+                //onTriggered: myWindow.open();
             }
             MenuItem {
                 text: "Quit"
@@ -57,7 +57,7 @@ ApplicationWindow {
         Menu {
             title: "Help"
             MenuItem { text: "Help Contents"
-                onTriggered:Qt.openUrlExternally("helpDoc.pdf")//url of filesource to be mentioned
+                onTriggered: guiWindow.viewHelpDoc();
             }
             MenuItem {
                 text: "About"
@@ -203,7 +203,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             x: 99
             y: 216
             text: qsTr("CONFIGURE")
-            onClicked: testWindow.getBUS_configuration();
+            onClicked: guiWindow.getBUS_configuration();
         }
 
 
@@ -299,7 +299,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             x: 208
             y: 215
             text: qsTr("SEND TEST")
-            onClicked: testWindow.send_can();
+            onClicked: guiWindow.send_can();
         }
 
     }
@@ -494,7 +494,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
                             testperiod.text = canDataModel.get(tableViewCanData.currentRow).loop
                             testtime.text = canDataModel.get(tableViewCanData.currentRow).period
                             //testtype.text=canDataModel.get(tableViewCanData.currentRow).type
-                            testWindow.send()
+                            guiWindow.send()
                         }
                     }
                 }
@@ -561,9 +561,9 @@ Our mission is to help leading corporations and individuals, create and enhance 
 
         Connections
         {
-            target: testWindow
+            target: guiWindow
             onSig_canViewChanged: {
-                viewPanel.append(qsTr(testWindow.updateView))
+                viewPanel.append(qsTr(guiWindow.updateView))
             }
         }
 
@@ -581,13 +581,13 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 {
                     viewPanel.append("Play Button Pressed")
                     btn_playPause.text = qsTr("Pause")
-                    testWindow.playCanView();
+                    guiWindow.playCanView();
                 }
                 else
                 {
                     viewPanel.append("Pause Button Pressed")
                     btn_playPause.text = qsTr("Play")
-                    testWindow.pauseCanView();
+                    guiWindow.pauseCanView();
                 }
             }
 

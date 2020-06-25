@@ -1,7 +1,7 @@
 '''
 Created on 10-Jun-2020
 
-@author: vanaja
+@author: vanaja, Manzoor, Hemlatha, Murugeswari
 '''
 
 import can
@@ -11,6 +11,7 @@ import struct
 from time import sleep
 import threading
 from typing import Dict, Tuple, Union
+import webbrowser
 
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtWidgets import QApplication
@@ -18,7 +19,7 @@ from PyQt5.QtCore import QObject, pyqtSlot,pyqtSignal,pyqtProperty
 
 global currentWindow
 
-class testWindow(QObject): #creating testWindow child class for QObject
+class guiWindow(QObject): #creating guiWindow child class for QObject
     sig_canViewChanged = pyqtSignal(str)
 
     def __init__(self):
@@ -50,6 +51,10 @@ class testWindow(QObject): #creating testWindow child class for QObject
     def pauseCanView(self):    
         canViewThread.pause()
         print("CanViewer Paused")
+    
+    @pyqtSlot()
+    def viewHelpDoc(self):
+        webbrowser.open_new(r'file:helpDoc.pdf')
           
     @pyqtProperty(str, notify=sig_canViewChanged)
     def updateView(self): 
@@ -61,7 +66,7 @@ class testWindow(QObject): #creating testWindow child class for QObject
             self._viewData = s
             self.sig_canViewChanged.emit(s)
             
-class tWindow(testWindow):
+class tWindow(guiWindow):
     def __init__(self):
         s=[]
         obj = w_SimX.findChild(QObject, "test_id")#finding and assigning test_id object
@@ -105,7 +110,7 @@ class tWindow(testWindow):
                 print("Message NOT sent")                
                 
                 
-class busConf(testWindow):
+class busConf(guiWindow):
     def __init__(self):
         global bus
         bus_Obj = w_SimX.findChild(QObject, "bustype_in")
@@ -119,7 +124,7 @@ class busConf(testWindow):
         print("bustype=",bustype,"\nchannel=",channel,"\nbitrate=",bitrate)
         
         
-class testMsg(testWindow):
+class testMsg(guiWindow):
     def __init__(self):
         h_dataList = []  #empty frame to check channel
         C_ID = 0x012     #id for channel empty message  
@@ -287,8 +292,8 @@ class gui_App (threading.Thread):
             
             app =QApplication(sys.argv)#creating an application object
             engine = QQmlApplicationEngine()#creating an engine object
-            currentWindow = testWindow()#creating object of testWindow class and initialize constructor 
-            engine.rootContext().setContextProperty("testWindow", currentWindow)#connection between qml and python
+            currentWindow = guiWindow()#creating object of guiWindow class and initialize constructor 
+            engine.rootContext().setContextProperty("guiWindow", currentWindow)#connection between qml and python
             engine.load('mainMenu.qml')#loading qml
             w_SimX=engine.rootObjects()[0]  #w_SimX object for qml 
             if not engine.rootObjects():

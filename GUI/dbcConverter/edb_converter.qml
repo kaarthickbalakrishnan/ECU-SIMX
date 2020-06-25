@@ -32,11 +32,11 @@ ApplicationWindow {
         Menu {
             title: "File"
             MenuItem {
-                text: "Open"
-                onTriggered: myWindow.open();//will open a child window
+                text: "New"
+                //onTriggered: myWindow.open();//will open a child window
             }
             MenuItem {
-                text: "Close"
+                text: "Quit"
                 onTriggered: window.close();//will close the full application
             }
 
@@ -59,7 +59,7 @@ ApplicationWindow {
         Menu {
             title: "Help"
             MenuItem { text: "Help Contents"
-                 onTriggered:Qt.openUrlExternally("FIELDS IN EXCEL.odt")//url of file source to be mentioned
+                 onTriggered: edb.viewHelpDoc();
                    }
             MenuItem {
                 text: "About"
@@ -72,8 +72,20 @@ ApplicationWindow {
                 width: 300
                 height: 300
                 visible: false
+                Text{
+                   objectName: "aboutText"
+                   width: parent.width
+                   id: about_Text
+                   x: 0
+                   y: 0
+                   height: parent.height
+                   wrapMode: "WordWrap"
+                    text: " ANCIT is a growing Automotive Tooling and Engineering Services Company based out of US, Germany and Bangalore - INDIA catering prominent enterprises to startup ventures committed in Industrial,Semiconductor, Automotive, IoT , Defence and Aerospace.
+
+Our mission is to help leading corporations and individuals, create and enhance efficient IT landscapes using various technologies that improve process and productive. More than mere tools, our process clearly aims at supporting people in maximizing their benefits and reduce the risk of failures."
+                }
                 function open(){
-                    visible = true
+                	visible = true
                 }
 
  			}
