@@ -101,7 +101,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
         y: 22
         width: 346
         height: 180
-        title: qsTr("SIgnal Database Input")
+        title: qsTr("Signal Database Input")
 
         Text {
             id: inputfilename
@@ -123,6 +123,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             width: 156
             height: 25
             text: ""
+            placeholderText: "Choose File"
         }
 
         Button {
@@ -133,8 +134,9 @@ Our mission is to help leading corporations and individuals, create and enhance 
             y: 47
             width: 20
             height: 25
-            text: qsTr("...")
+            text: qsTr("---")
             onClicked: edb.browse_create()
+            visible : false
         }
         Button {
             Layout.row: 1
@@ -145,7 +147,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             width: 20
             height: 25
             text: qsTr("...")
-            visible: false
+            visible: true
             onClicked: {
                 edb.browse()
             }
@@ -171,6 +173,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             width: 156
             height: 25
             text: "Sample"
+            placeholderText: "Only Name"
         }
 
         Button {
@@ -179,6 +182,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             y: 121
             width: 106
             height: 22
+            visible: false
             text: qsTr("Execute")
             onClicked:edb.exec_fn();
         }
@@ -195,27 +199,33 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 if(currentText == "Create") {
                     textArea3.text = qsTr("Create")
                     groupBoxOut.visible = false
+                    browseCreate.visible = true
                     browseEdit.visible = false
                     createFileName.visible = true
                     inputfilename3.visible = true
+                    inputPath_text.placeholderText = "Choose Folder"
                     exec_Btn.visible = true
                     inputfilename2.visible = false
                 }
                 if(currentText == "Editor") {
                     textArea3.text = qsTr("Editor button")
                     groupBoxOut.visible = false
+                    browseCreate.visible = false
                     browseEdit.visible = true
                     createFileName.visible = false
                     inputfilename3.visible = false
+                    inputPath_text.placeholderText = "Choose File"
                     exec_Btn.visible = true
                     inputfilename2.visible = true
                 }
                 if(currentText == "Converter") {
                     textArea3.text = qsTr("Converter")
                     groupBoxOut.visible = true
+                    browseCreate.visible = false
                     browseEdit.visible = true
                     createFileName.visible = false
                     inputfilename3.visible = false
+                    inputPath_text.placeholderText = "Choose File"
                     exec_Btn.visible = false
                     inputfilename2.visible = true
 
@@ -311,6 +321,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             width: 156
             height: 25
             text: "Sample"
+            placeholderText: "only Name"
         }
         TextField {
             objectName: "outputPath"
@@ -319,6 +330,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             y: 84
             width: 156
             height: 25
+            placeholderText: "Choose Folder"
         }
 
         Button {
