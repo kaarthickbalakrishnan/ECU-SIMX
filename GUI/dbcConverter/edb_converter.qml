@@ -190,7 +190,7 @@ Our mission is to help leading corporations and individuals, create and enhance 
             width: 107
             height: 25
             objectName: "function_select"
-            model: ['Create', 'Editor', 'Converter']
+            model: ['Converter', 'Editor', 'Create']
             onCurrentIndexChanged:{
                 if(currentText == "Create") {
                     textArea3.text = qsTr("Create")
