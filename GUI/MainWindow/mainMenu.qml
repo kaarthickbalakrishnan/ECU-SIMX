@@ -32,7 +32,11 @@ ApplicationWindow {
             title: "File"
             MenuItem {
                 text: "New"
-                //onTriggered: myWindow.open();
+                onTriggered: {
+                	var component = Qt.createComponent("mainMenu.qml")
+                    var window    = component.createObject()
+                    window.show()
+                }
             }
             MenuItem {
                 text: "Quit"
