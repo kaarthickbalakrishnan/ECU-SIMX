@@ -516,7 +516,61 @@ Our mission is to help leading corporations and individuals, create and enhance 
                 canDataModel.append({"canID" : "", "message" : " ", "period" : " "})
             }
         }
-
+		
+		TextField {
+        id: testid
+        objectName: "test_id"
+        x: 12
+        y: 375
+        width: 84
+        height: 23
+        visible: false
+        placeholderText: qsTr("Current id")
+	    }
+	    
+	    TextField {
+	        id: testmsg
+	        objectName: "test_msg"
+	        x: 102
+	        y: 375
+	        width: 156
+	        height: 23
+	        visible: false
+	        placeholderText: qsTr("Current data")
+	    }
+	
+	    TextField {
+	        id: testperiod
+	        objectName: "test_period"
+	        x: 272
+	        y: 375
+	        width: 80
+	        height: 23
+	        visible: false
+	        placeholderText: qsTr("Periodic")
+	    }
+	
+	    TextField {
+	        id: testtime
+	        objectName: "test_time"
+	        x: 367
+	        y: 375
+	        width: 110
+	        height: 23
+	        visible: false
+	        placeholderText: qsTr("Time")
+	    }
+	
+	    TextField {
+	        id: testtype
+	        objectName: "test_type"
+	        x: 519
+	        y: 375
+	        width: 85
+	        height: 23
+	        visible: false
+	        placeholderText: qsTr("Can type")
+	    }
 
 
     }
@@ -541,23 +595,6 @@ Our mission is to help leading corporations and individuals, create and enhance 
             border.width: 2
         }
 
-        TextArea {
-            objectName: "viewPanelText"
-            id: viewPanel
-            readOnly: true
-            x: 0
-            y: 49
-            width: 645
-            //width: 780
-            //height: 293
-            height: 311
-            text: qsTr("")
-            textColor: "#00000000"
-            font.family: "Times New Roman"
-            font.pixelSize: 12
-
-
-        }
 
         Connections
         {
@@ -590,6 +627,24 @@ Our mission is to help leading corporations and individuals, create and enhance 
                     guiWindow.pauseCanView();
                 }
             }
+
+        }
+
+        TextArea {
+            objectName: "viewPanelText"
+            id: viewPanel
+            readOnly: true
+            x: 0
+            y: 49
+            width: 645
+            //width: 780
+            //height: 293
+            height: 311
+            text: qsTr("")
+            textColor: "#000000"
+            font.family: "Times New Roman"
+            font.pixelSize: 12
+
 
         }
 
